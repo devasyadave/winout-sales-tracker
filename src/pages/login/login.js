@@ -38,6 +38,7 @@ export const Login = () => {
             let user_profile = await getUserProfile(otp_verification.user.uid)
 
             if (user_profile) {
+                auth.setUser({ ...otp_verification.user, profile: user_profile })
                 navigate("/add_sales_lot", { replace: true })
             }
             else {
@@ -89,12 +90,21 @@ export const Login = () => {
                                     value={phone}
                                     onChange={setPhone}
                                     countries={['IN']}
-                                    addInternationalOption={false} defaultCountry="IN" ></PhoneInput>
+                                    addInternationalOption={false} defaultCountry="IN"></PhoneInput>
                             </Box>
-                            {showOtpField && <Box>
+                            {/* <Box display="flex" justifyContent="center" flexDirection="column" gap="10px">
                                 <OtpInput numInputs={6} value={otp}
-                                    onChange={setOtp} renderInput={(props) => <input {...props} />}  ></OtpInput>
-                                <Button onClick={verifyOtp} >verify OTP</Button>
+                                    onChange={setOtp} renderInput={(props) => <input {...props} />}
+                                    renderSeparator={<span>-</span>}
+                                    containerStyle={{ justifyContent: "center" }} inputStyle={{ aspectRatio: 1, width: "1.4em" }}></OtpInput>
+                                <Box className="purple-box"><Button onClick={verifyOtp} >verify OTP</Button></Box>
+                            </Box> */}
+                            {showOtpField && <Box display="flex" justifyContent="center" flexDirection="column" gap="10px">
+                                <OtpInput numInputs={6} value={otp}
+                                    onChange={setOtp} renderInput={(props) => <input {...props} />}
+                                    renderSeparator={<span>-</span>}
+                                    containerStyle={{ justifyContent: "center" }} inputStyle={{ aspectRatio: 1, width: "1.4em" }}></OtpInput>
+                                <Box className="purple-box"><Button onClick={verifyOtp} >verify OTP</Button></Box>
                             </Box>}
                             {/* <Box>
                         <TextField required type="password" onChange={(e) => setPassword(e.target.value)}></TextField>
@@ -102,7 +112,7 @@ export const Login = () => {
                             {!showOtpField && <Box id="recaptcha-container">
 
                             </Box>}
-                            <Box class="purple-box">
+                            <Box className="purple-box">
                                 {!showOtpField && <Button id='sign-in-button' fullWidth type="submit" onClick={handleSubmit}>{isAuthenticating ? <CircularProgress /> : "Submit"}</Button>}
                             </Box>
                         </Box>

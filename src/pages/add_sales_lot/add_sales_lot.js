@@ -101,9 +101,12 @@ export const AddSalesLotPage = () => {
     }
     return (
         <Container>
-            <Box>
+            <Box display="flex" justifyContent="space-between">
+                {auth.user.profile?.role && auth.user.profile.role === "admin" ? <Button onClick={() => navigate('/admin/dashboard')}>Admin</Button> : <div></div>}
                 <Typography variant="h5">Add Sales Lot</Typography>
+
                 <LogoutButton></LogoutButton>
+
             </Box>
             {salesRows.map((sales_row, index) => {
                 return <Box key={index} display="flex" justifyContent="space-evenly" maxWidth={1000} margin={1} alignItems="center" >
