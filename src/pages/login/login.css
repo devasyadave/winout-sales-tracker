@@ -1,0 +1,9 @@
+.purple-box {
+    border: 2px solid blueviolet;
+    border-radius: 5px;
+    background-color: rgba(158, 27, 158, 0.1);
+}
+
+.PhoneInputInput {
+    height: 35px;
+}

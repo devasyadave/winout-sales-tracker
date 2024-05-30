@@ -12,7 +12,8 @@ const firebaseConfig = {
     projectId: "winoutsalestracker",
     storageBucket: "winoutsalestracker.appspot.com",
     messagingSenderId: "715608959686",
-    appId: "1:715608959686:web:c541df001567d1e3e105c7"
+    appId: "1:715608959686:web:c541df001567d1e3e105c7",
+
 };
 
 // Initialize Firebase

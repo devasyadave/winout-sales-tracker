@@ -1,4 +1,4 @@
-import { collection, addDoc, getDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc, updateDoc, getDocs, query, orderBy, where } from "firebase/firestore";
 import { db } from '../firebase';
 
 export const addSalesLot = async (sales_lot) => {
@@ -22,3 +22,30 @@ export const updateSalesLot = async (sales_lot) => {
     }
 }
 
+export const getSalesRecordsByUser = async (user_id) => {
+
+    try {
+        const docsRef = collection(db, 'sales_lots')
+        const records = await getDocs(query(docsRef, where("user_id", "==", user_id), orderBy('created_at', 'desc')))
+
+        const res = records.docs.map(doc => { return { id: doc.id, ...doc.data() } });
+
+        return res
+    }
+    catch (e) {
+        throw (e)
+    }
+}
+
+export const getAllSalesRecords = async () => {
+    try {
+        const docRef = collection(db, 'sales_lots')
+        const records = await getDocs(query(docRef, orderBy("created_at", "desc")))
+        const res = records.docs.map(doc => { return { id: doc.id, ...doc.data() } });
+
+        return res
+    }
+    catch (e) {
+        throw (e)
+    }
+}

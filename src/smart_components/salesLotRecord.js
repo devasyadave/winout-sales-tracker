@@ -4,7 +4,7 @@ import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import './salesLotRecord.css'
-
+import { Timestamp } from "firebase/firestore"
 export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => {
 
     const [mode, setMode] = useState('read')
@@ -21,7 +21,9 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
     //     }
     // ]
     useEffect(() => {
+
         setSalesLotRecord({ ...sales_lot_record })
+        console.log(dayjs(salesLotRecord.created_at.toDate()).format('D MMM YYYY'))
     }, [])
 
     function updateSalesLotRecord(key, value) {
@@ -51,7 +53,7 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
         mode === 'read' ? <Card>
             <CardContent>
                 <Box display="flex" justifyContent="space-between" gap={4}>
-                    <Typography>{formatDate(salesLotRecord.created_at)}</Typography>
+                    <Typography>{dayjs(salesLotRecord.created_at.toDate()).format('D MMM YYYY')}</Typography>
                     <IconButton onClick={() => setMode('edit')} style={{ padding: 0 }}>
                         <Edit></Edit>
                     </IconButton>
@@ -75,14 +77,14 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                         <DatePicker
                             slotProps={{ layout: { style: { height: "0px !important" } } }}
                             format="DD-MM-YYYY"
-                            value={dayjs(salesLotRecord.created_at)}></DatePicker>
+                            value={dayjs(salesLotRecord.created_at.toDate())}></DatePicker>
                         <IconButton onClick={() => onSave()}>
                             {!isSaving ? <Save></Save> : <CircularProgress></CircularProgress>}
                         </IconButton>
                     </Box>
                     <Divider style={{ margin: 4, marginBottom: 8 }}></Divider>
                     {salesLotRecord.salesLot.map((item, index) => {
-                        return (<Box key={index} display="flex" gap={4}>
+                        return (<Box key={index} display="flex" gap={4} marginTop={2}>
                             <Autocomplete
                                 isOptionEqualToValue={(option, value) => option.value === value.value}
                                 disablePortal

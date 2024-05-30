@@ -9,9 +9,12 @@ import '@fontsource/roboto/700.css';
 import { timeout } from "workbox-core/_private";
 import { LogoutButton } from "../../smart_components/logoutButton";
 import { SalesLotRecord } from "../../smart_components/salesLotRecord";
-import { getAllProducts, getSalesRecordsByUser } from "../../api/products";
+import { getAllProducts } from "../../api/products";
+import { getSalesRecordsByUser } from "../../api/sales_records";
 import dayjs from "dayjs";
 import { useAuth } from "../../App";
+import { serverTimestamp } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 var utc = require('dayjs/plugin/utc')
 var timezone = require('dayjs/plugin/timezone')
 dayjs.extend(utc)
@@ -24,6 +27,7 @@ export const AddSalesLotPage = () => {
         product_id: null,
         quantity: null
     }]);
+    let navigate = useNavigate();
     const [isFetchingSalesRecords, setIsFetchingSalesRecords] = useState(false);
     useEffect(() => {
         fetchProducts();
@@ -31,16 +35,35 @@ export const AddSalesLotPage = () => {
     }, [])
 
     const fetchProducts = async () => {
-        const records = await getAllProducts();
-        const product_list = records.map((item) => { return { label: String(item.product_id), value: parseInt(item.product_id) } })
-        setProducts(product_list);
+        try {
+            const records = await getAllProducts();
+            const product_list = records.map((item) => { return { label: String(item.product_id), value: parseInt(item.product_id) } })
+            setProducts(product_list);
+        }
+        catch (e) {
+            console.log(e)
+            navigate('/create_user_profile')
+        }
     }
 
     const fetchSalesRecords = async () => {
         setIsFetchingSalesRecords(true);
-        const records = await getSalesRecordsByUser(auth.user.uid);
-        setSalesLotRecords(records);
-        setIsFetchingSalesRecords(false);
+        try {
+            console.log(auth.user)
+            console.log(auth.user.uid)
+            if (auth.user) {
+                const records = await getSalesRecordsByUser(auth.user.uid);
+                setSalesLotRecords(records);
+
+            }
+        }
+        catch (e) {
+            console.log(e)
+            navigate('/create_user_profile')
+        }
+        finally {
+            setIsFetchingSalesRecords(false);
+        }
     }
 
     const [isInserting, setIsInserting] = useState(false);
@@ -66,7 +89,7 @@ export const AddSalesLotPage = () => {
     const handleSubmit = async () => {
         try {
             setIsInserting(true);
-            await addSalesLot({ salesLot: [...salesRows], created_at: dayjs().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss'), user_id: auth.user.uid })
+            await addSalesLot({ salesLot: [...salesRows], created_at: serverTimestamp(), user_id: auth.user.uid })
             await fetchSalesRecords();
             setIsInserting(false);
         }

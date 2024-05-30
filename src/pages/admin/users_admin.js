@@ -5,7 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CircularProgress, Switch } from '@mui/material';
 import { createColumnHelper, createTable, getCoreRowModel, useReactTable, flexRender } from '@tanstack/react-table';
 import { StaleWhileRevalidate } from 'workbox-strategies';
-
+import UserCard from '../../smart_components/user_card';
 
 const UsersAdmin = () => {
     const columnHelper = createColumnHelper();
@@ -40,21 +40,19 @@ const UsersAdmin = () => {
 
     const changeUserActive = async (dataIndex, value) => {
         try {
-            const userDataCopy = { ...users }
-
-            userDataCopy[dataIndex]['isActiveLoading'] = true;
-            console.log(userDataCopy)
-            await toggleUserActivation(users[dataIndex].id, value)
-            userDataCopy[dataIndex]['isActive'] = value
-            userDataCopy[dataIndex]['isActiveLoading'] = false
-            console.log(userDataCopy)
-            setUsers({ ...userDataCopy })
+            let userCopy = [...users]
+            //let index = userCopy.findIndex((user) => user.id === user_id)
+            userCopy[dataIndex]['isActiveLoading'] = true;
+            setUsers(userCopy)
+            await toggleUserActivation(userCopy[dataIndex]['id'], value)
+            const userData = await getAllUserProfiles();
+            setUsers(userData);
         } catch (error) {
             throw error
         }
-
-
     }
+
+
     useEffect(() => {
         // Fetch user data from API or local data source
         // For example:
@@ -168,12 +166,12 @@ const UsersAdmin = () => {
                     console.log(dataIndex)
                     return (
                         !users[dataIndex]['isActiveLoading'] ?
-                            <Switch onChange={(e, value) => {
+                            <Switch checked={users[dataIndex]['isActive']} onChange={(e, value) => {
 
                                 changeUserActive(dataIndex, value)
 
                             }} >
-                            </Switch> : <CircularProgress></CircularProgress>
+                            </Switch> : <CircularProgress size={3}></CircularProgress>
 
                     );
                 }
@@ -223,56 +221,27 @@ const UsersAdmin = () => {
     console.log(defaultColumns);
     const table = useReactTable({ columns: defaultColumns, data: users, getCoreRowModel: getCoreRowModel() })
     return (
-        <div className="p-2">
-            <table>
-                <thead>
-                    {table.getHeaderGroups().map(headerGroup => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map(header => (
-                                <th key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {table.getRowModel().rows.map(row => (
-                        <tr key={row.id}>
-                            {row.getVisibleCells().map(cell => (
-                                <td key={cell.id}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-                {/* <tfoot>
-                    {table.getFooterGroups().map(footerGroup => (
-                        <tr key={footerGroup.id}>
-                            {footerGroup.headers.map(header => (
-                                <th key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                            header.column.columnDef.footer,
-                                            header.getContext()
-                                        )}
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </tfoot> */}
-            </table>
-            <div className="h-4" />
-            <button className="border p-2">
-                Rerender
-            </button>
+        // <div className="p-2">
+        //     {
+        //         users.map((user) => {
+        //             return <UserCard user={user} onActiveChange={changeUserActive}></UserCard>
+        //         })
+        //     }
+        // </div>
+
+        <div>
+            <ThemeProvider theme={muiTheme()}>
+                <MUIDataTable
+                    title={"User List"}
+                    data={users}
+                    columns={columns}
+                    options={{
+                        filterType: "checkbox",
+                        selectableRows: "none",
+                        responsive: "standard"
+                    }}
+                />
+            </ThemeProvider >
         </div>
     );
 }
