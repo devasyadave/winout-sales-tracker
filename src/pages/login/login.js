@@ -54,6 +54,7 @@ export const Login = () => {
 
     }
     const perform_sign_in = async (verifier) => {
+        console.log(phone)
         console.log(verifier)
         try {
             signInResult.current = await signInWithPhoneNumber(firebase_auth, phone, verifier)

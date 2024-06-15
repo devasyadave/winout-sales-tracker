@@ -23,6 +23,8 @@ import { SalesAdmin } from './pages/admin/sales_admin';
 import CreateUserProfilePage from './pages/create_user_profile/create_user_profile';
 import UsersAdmin from './pages/admin/users_admin';
 import PendingActivation from './pages/misc/PendingActivation';
+import { ProductsAdmin } from './pages/admin/products_admin';
+import PaymentsAdmin from './pages/admin/payments_admin';
 export const useAuth = () => {
   return useContext(AuthContext);
 }
@@ -141,6 +143,8 @@ function App() {
               <Route path='/admin' element={<RequireAdmin><AdminLayout></AdminLayout></RequireAdmin>}>
                 <Route path='dashboard' element={<SalesAdmin />}></Route>
                 <Route path='users' element={<UsersAdmin />}></Route>
+                <Route path='products' element={<ProductsAdmin />}></Route>
+                <Route path='payments' element={<PaymentsAdmin />}></Route>
               </Route>
               <Route path='/add_sales_lot' element={<RequireAuth><RequireActive><AddSalesLotPage /></RequireActive></RequireAuth>}></Route>
               <Route path='/create_user_profile' element={<RequireAuth><CreateUserProfilePage /></RequireAuth>}></Route>

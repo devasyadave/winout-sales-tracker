@@ -12,6 +12,8 @@ export const AdminLayout = ({ children }) => {
             <Drawer open={true} variant="permanent">
                 <Button onClick={() => navigate('dashboard')}>Sales</Button>
                 <Button onClick={() => navigate('users')}>Users</Button>
+                <Button onClick={() => navigate('products')}>Products</Button>
+                <Button onClick={() => navigate('payments')}>Payments</Button>
             </Drawer>
             <Box marginTop={5}>
                 <Outlet />

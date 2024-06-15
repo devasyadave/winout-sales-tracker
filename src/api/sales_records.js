@@ -22,6 +22,18 @@ export const updateSalesLot = async (sales_lot) => {
     }
 }
 
+export const updateSalesLotById = async (id, data) => {
+    try {
+        const docRef = doc(db, 'sales_lots', id)
+        const res = await updateDoc(docRef, { ...data })
+        console.log(res)
+    }
+    catch (e) {
+        throw (e)
+    }
+
+}
+
 export const getSalesRecordsByUser = async (user_id) => {
 
     try {
