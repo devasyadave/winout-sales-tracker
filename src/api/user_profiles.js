@@ -42,3 +42,9 @@ export const toggleUserActivation = async (id, value) => {
         throw (e)
     }
 }
+
+export const isAdmin = async (id) => {
+    const profile = await getUserProfile(id);
+    if (profile.role && profile.role == 'admin') return true;
+    return false;
+}

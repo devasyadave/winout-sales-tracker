@@ -65,8 +65,11 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                         <Typography>{item.product_id}</Typography>
                         <Typography variant="p">Quantity</Typography>
                         <Typography>{item.quantity}</Typography>
+                        <Typography variant="p">Total</Typography>
+                        <Typography>{item.quantity * 10}</Typography>
                     </Box>)
                 })}
+                <Typography variant="p" style={{ float: "left" }}><b>Overall Total : {salesLotRecord.salesLot.reduce((acc, item) => { return acc + (10 * item.quantity) }, 0)}</b></Typography>
 
             </CardContent>
         </Card>
@@ -98,7 +101,17 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                                     setSalesLotRecord(temp_sales_lot_record);
                                 }
                                 }
-                                renderInput={(params) => <TextField {...params} label="Product" />} />
+                                renderInput={(params) => <TextField {...params} label="Product" />}
+                                renderOption={(props, option) => <Box component="li" {...props}>
+                                    <Card variant="outlined" sx={{ width: '100%', margin: 0, padding: 0 }}>
+                                        <CardContent sx={{ padding: '8px !important' }}>
+                                            <Typography variant="subtitle1">ID: {option.product_id}</Typography>
+                                            <Typography variant="subtitle1">Name: {option.name}</Typography>
+                                            <Typography variant="subtitle1">Category: {option.category}</Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Box>}
+                            />
 
                             <Typography variant="p">Quantity</Typography>
                             <TextField variant="standard" value={item.quantity}

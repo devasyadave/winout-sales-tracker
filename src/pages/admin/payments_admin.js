@@ -122,6 +122,7 @@ const PaymentsAdmin = () => {
             salesLot['storeName'] = profile.storeName
 
             salesLot['total'] = salesLot['salesLot'].reduce((acc, item) => { return acc + (item.rate * item.quantity) }, 0);
+            salesLot['commission'] = salesLot['salesLot'].reduce((acc, item) => { return acc + (10 * item.quantity) }, 0);
             return salesLot
         })
         //console.log(rows)
@@ -152,6 +153,7 @@ const PaymentsAdmin = () => {
     const renderDetails = (salesLot) => {
         const details = salesLot['salesLot'];
         const total = details.reduce((acc, item) => acc + item.rate * item.quantity, 0);
+        const commission = details.reduce((acc, item) => acc + 10 * item.quantity, 0);
         return (
             <CardContent>
                 <Table>
@@ -161,6 +163,7 @@ const PaymentsAdmin = () => {
                             <TableCell>Rate</TableCell>
                             <TableCell>Quantity</TableCell>
                             <TableCell>Total</TableCell>
+                            <TableCell>Commission</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -170,11 +173,14 @@ const PaymentsAdmin = () => {
                                 <TableCell>{item.rate}</TableCell>
                                 <TableCell>{item.quantity}</TableCell>
                                 <TableCell>{item.rate * item.quantity}</TableCell>
+                                <TableCell>{10 * item.quantity}</TableCell>
                             </TableRow>
                         ))}
                         <TableRow>
                             <TableCell colSpan={3} align="right">Overall Total</TableCell>
                             <TableCell>{total}</TableCell>
+                            <TableCell>{commission}</TableCell>
+
                         </TableRow>
 
                     </TableBody>

@@ -1,4 +1,4 @@
-import { CircularProgress, Autocomplete, Box, Button, Container, Icon, IconButton, TextField, Typography } from "@mui/material";
+import { CircularProgress, Autocomplete, Box, Button, Container, Icon, IconButton, TextField, Typography, Card, CardContent } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { addSalesLot, updateSalesLot } from "../../api/sales_records";
@@ -37,7 +37,12 @@ export const AddSalesLotPage = () => {
     const fetchProducts = async () => {
         try {
             const records = await getAllProducts();
-            const product_list = records.map((item) => { return { label: String(item.product_id), value: parseInt(item.product_id) } })
+            const product_list = records.map((item) => {
+                return {
+                    label: String(item.product_id), value: parseInt(item.product_id),
+                    product_id: item.product_id, category: item.category, name: item.name
+                }
+            })
             setProducts(product_list);
         }
         catch (e) {
@@ -82,7 +87,7 @@ export const AddSalesLotPage = () => {
 
     const updateSalesRow = (index, param, value) => {
         const updatedSalesRows = [...salesRows]
-        updatedSalesRows[index][param] = value;
+        updatedSalesRows[index][param] = value || "";
         setSalesRows(updatedSalesRows);
     }
 
@@ -116,8 +121,18 @@ export const AddSalesLotPage = () => {
                         id="combo-box-demo"
                         options={products}
                         sx={{ width: 300 }}
-                        onChange={(e, value) => updateSalesRow(index, "product_id", value.value)}
-                        renderInput={(params) => <TextField {...params} label="Product" />} />
+                        onChange={(e, value) => updateSalesRow(index, "product_id", value?.value || "")}
+                        renderInput={(params) => <TextField {...params} label="Product" />}
+                        renderOption={(props, option) => <Box component="li" {...props}>
+                            <Card variant="outlined" sx={{ width: '100%', margin: 0, padding: 0 }}>
+                                <CardContent sx={{ padding: '8px !important' }}>
+                                    <Typography variant="subtitle1">ID: {option.product_id}</Typography>
+                                    <Typography variant="subtitle1">Name: {option.name}</Typography>
+                                    <Typography variant="subtitle1">Category: {option.category}</Typography>
+                                </CardContent>
+                            </Card>
+                        </Box>}
+                    />
                     <TextField
                         type="number" value={sales_row.quantity || ""} onChange={(e) => updateSalesRow(index, "quantity", parseInt(e.target.value))}></TextField>
                     {salesRows.length > 1 && <IconButton onClick={() => removeSalesRow(index)}><Delete></Delete></IconButton>}
