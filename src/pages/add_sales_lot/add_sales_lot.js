@@ -39,7 +39,7 @@ export const AddSalesLotPage = () => {
             const records = await getAllProducts();
             const product_list = records.map((item) => {
                 return {
-                    label: String(item.product_id), value: parseInt(item.product_id),
+                    label: String(item.product_id), value: item.product_id,
                     product_id: item.product_id, category: item.category, name: item.name
                 }
             })

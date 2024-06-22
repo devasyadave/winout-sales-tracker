@@ -2,17 +2,18 @@
 import { getAllProducts, storeProduct, updateProduct } from "../../api/products"
 import MUIDataTable from "mui-datatables";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, ButtonGroup, Container, DialogContent, DialogTitle, IconButton, TableCell, TableRow, Typography } from "@mui/material"
+import { Box, Button, ButtonGroup, Container, DialogContent, DialogTitle, IconButton, TableCell, TableRow, Typography, LinearProgress } from "@mui/material"
 import Dialog from '@mui/material/Dialog';
 import { useState, useEffect } from "react"
 import { Delete, Edit } from "@mui/icons-material";
 import EditProduct from "../../smart_components/editProduct";
-
+import axios from 'axios';
 export const ProductsAdmin = () => {
 
     const [productList, setProductList] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [formData, setFormData] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
     const muiTheme = () => {
         return createTheme({
             components: {
@@ -141,6 +142,38 @@ export const ProductsAdmin = () => {
             }
         }
     ]
+    const handleFileUpload = async (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = async function (e) {
+            try {
+                const json = JSON.parse(e.target.result);
+                //document.getElementById('jsonOutput').textContent = JSON.stringify(json, null, 2);
+                console.log(json); // Log the JSON object
+                json.forEach((element) => {
+                    storeProduct({ product_id: element.design, rate: 0, design: element.design, color: element.color, name: element.color, category: "core" })
+                });
+            } catch (error) {
+                alert('Error parsing JSON: ' + error.message);
+            }
+        };
+        reader.readAsText(file)
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // axios.post('/upload', formData, {
+        //     onUploadProgress: (progressEvent) => {
+        //         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        //         setUploadProgress(percentCompleted);
+        //     }
+        // })
+        //     .then(response => {
+        //         console.log(response);
+        //     })
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+    };
 
     return (
         <Box id="products-container" display="flex" flexWrap="wrap" justifyContent="space-evenly">
@@ -180,6 +213,21 @@ export const ProductsAdmin = () => {
                     }}
                 />
             </ThemeProvider >
+            <LinearProgress variant="determinate" value={uploadProgress} />
+            <div>
+                <input
+                    //accept="image/*"
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                    onChange={handleFileUpload}
+                />
+                <label htmlFor="contained-button-file">
+                    <Button variant="contained" color="primary" component="span">
+                        Upload
+                    </Button>
+                </label>
+            </div>
         </Box>
     );
 

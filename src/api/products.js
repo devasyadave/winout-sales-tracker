@@ -35,10 +35,12 @@ export const storeProduct = async (product_data) => {
         let prod_obj = { ...product_data }
         let rate_obj = { rate: parseInt(product_data.rate) }
         delete prod_obj["rate"];
-        await setDoc(doc(db, "products", product_data.product_id), { ...prod_obj });
-        await setDoc(doc(db, "product_meta", product_data.product_id), { ...rate_obj });
+        console.log(String(prod_obj.product_id))
+        await setDoc(doc(db, "products", String(prod_obj.product_id)), { ...prod_obj });
+        await setDoc(doc(db, "product_meta", String(prod_obj.product_id)), { ...rate_obj });
     }
     catch (e) {
+        //console.log(prod_obj)
         throw e
     }
 }
