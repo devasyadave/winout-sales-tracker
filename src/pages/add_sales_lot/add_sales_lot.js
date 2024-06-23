@@ -39,7 +39,7 @@ export const AddSalesLotPage = () => {
             const records = await getAllProducts();
             const product_list = records.map((item) => {
                 return {
-                    label: String(item.product_id), value: item.product_id,
+                    label: item.product_id, value: item.product_id,
                     product_id: item.product_id, category: item.category, name: item.name, size: item.size
                 }
             })
@@ -116,13 +116,14 @@ export const AddSalesLotPage = () => {
             {salesRows.map((sales_row, index) => {
                 return <Box key={index} display="flex" justifyContent="space-evenly" maxWidth={1000} margin={1} alignItems="center" >
                     <Autocomplete
+                        type="number"
                         isOptionEqualToValue={(option, value) => option.value === value.value}
                         disablePortal
                         id="combo-box-demo"
                         options={products}
                         sx={{ width: 300 }}
                         onChange={(e, value) => updateSalesRow(index, "product_id", value?.value || "")}
-                        renderInput={(params) => <TextField {...params} label="Product" />}
+                        renderInput={(params) => <TextField type="number" {...params} label="Product" />}
                         renderOption={(props, option) => <Box component="li" {...props}>
                             <Card variant="outlined" sx={{ width: '100%', margin: 0, padding: 0 }}>
                                 <CardContent sx={{ padding: '8px !important' }}>
