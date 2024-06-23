@@ -14,6 +14,7 @@ export const AdminLayout = ({ children }) => {
                 <Button onClick={() => navigate('users')}>Users</Button>
                 <Button onClick={() => navigate('products')}>Products</Button>
                 <Button onClick={() => navigate('payments')}>Payments</Button>
+                <Button onClick={() => navigate('/add_sales_lot')}>Home</Button>
             </Drawer>
             <Box marginTop={5}>
                 <Outlet />

@@ -38,6 +38,7 @@ export const Login = () => {
             let user_profile = await getUserProfile(otp_verification.user.uid)
 
             if (user_profile) {
+                localStorage.setItem('user', JSON.stringify({ ...otp_verification.user, profile: user_profile }))
                 auth.setUser({ ...otp_verification.user, profile: user_profile })
                 navigate("/add_sales_lot", { replace: true })
             }
