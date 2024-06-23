@@ -106,7 +106,8 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                     {salesLotRecord.salesLot.map((item, index) => {
                         return (<Box key={index} display="flex" gap={4} marginTop={2}>
                             <Autocomplete
-                                isOptionEqualToValue={(option, value) => option.value === value.value}
+                                isOptionEqualToValue={(option, value) => option.value === value?.value}
+                                getOptionLabel={(option) => String(option.product_id)}
                                 disablePortal
                                 id="combo-box-demo"
                                 options={products}
@@ -114,12 +115,12 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                                 sx={{ width: 300 }}
                                 onChange={(e, v) => {
                                     const temp_sales_lot_record = { ...salesLotRecord }
-                                    temp_sales_lot_record.salesLot[index].product_id = v.value
+                                    temp_sales_lot_record.salesLot[index].product_id = v?.value || ""
                                     setSalesLotRecord(temp_sales_lot_record);
                                 }
                                 }
-                                renderInput={(params) => <TextField {...params} label="Product" />}
-                                renderOption={(props, option) => <Box component="li" {...props}>
+                                renderInput={(params) => <TextField type="number" {...params} label="Product" />}
+                                renderOption={(props, option) => <Box key={option.product_id} component="li" {...props}>
                                     <Card variant="outlined" sx={{ width: '100%', margin: 0, padding: 0 }}>
                                         <CardContent sx={{ padding: '8px !important' }}>
                                             <Typography variant="subtitle1">ID: {option.product_id}</Typography>
@@ -130,7 +131,7 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                                 </Box>}
                             />
 
-                            <Typography variant="p">Quantity</Typography>
+                            < Typography variant="p" > Quantity</Typography>
                             <TextField variant="standard" value={item.quantity}
                                 onChange={(e) => {
                                     const temp_sales_lot_record = { ...salesLotRecord }
@@ -140,7 +141,7 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                                 }>{item.quantity}</TextField>
                         </Box>)
                     })}
-                </CardContent>
+                </CardContent >
             </Card >
     )
 
