@@ -26,30 +26,6 @@ import { getAllSalesRecords, patchSalesLot, updateSalesLotById } from '../../api
 import { getAllProducts } from '../../api/products';
 import { getAllUserProfiles } from '../../api/user_profiles';
 
-const rows = [
-    {
-        storeName: 'Store 1',
-        salesLotId: 'SL001',
-        total: 500,
-        paid: true,
-        details: [
-            { name: 'Item 1', rate: 50, quantity: 3 },
-            { name: 'Item 2', rate: 100, quantity: 2 },
-            { name: 'Item 3', rate: 25, quantity: 4 }
-        ]
-    },
-    {
-        storeName: 'Store 2',
-        salesLotId: 'SL002',
-        total: 300,
-        paid: false,
-        details: [
-            { name: 'Item A', rate: 50, quantity: 2 },
-            { name: 'Item B', rate: 50, quantity: 4 }
-        ]
-    }
-];
-
 
 
 const PaymentsAdmin = () => {
@@ -110,7 +86,12 @@ const PaymentsAdmin = () => {
             let detailed_sales_lot = salesLot['salesLot'].map((sale, index) => {
                 //console.log(products)
                 let prod = products.find((prod, index) => parseInt(prod.product_id) == sale.product_id)
-                sale['rate'] = prod.rate
+                try {
+                    sale['rate'] = prod.rate
+                }
+                catch (e) {
+                    console.log(e)
+                }
                 sale['name'] = prod.name
 
                 sale['product'] = prod

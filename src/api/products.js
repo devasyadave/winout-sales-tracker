@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, updateDoc, doc, setDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, doc, setDoc, query, orderBy } from "firebase/firestore";
 import { db } from '../firebase';
 import { getAuth } from "firebase/auth";
 import { isAdmin } from "./user_profiles";
@@ -6,11 +6,11 @@ import { dialogClasses } from "@mui/material";
 export const getAllProducts = async () => {
     const auth = getAuth();
     try {
-        const records = await getDocs(collection(db, "products"))
+        const records = await getDocs(query(collection(db, "products"), orderBy('product_id', 'asc')))
         console.log(auth.user)
         const isAdminUser = await isAdmin(auth.currentUser.uid);
         if (isAdminUser) {
-            const rates = await getDocs(collection(db, "product_meta"))
+            const rates = await getDocs(query(collection(db, "product_meta")))
             const res = records.docs.map((prod_doc) => {
                 let rate = rates.docs.find((rate_doc) => rate_doc.id == prod_doc.id)
                 let prod_data = prod_doc.data()

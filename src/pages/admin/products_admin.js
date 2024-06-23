@@ -151,7 +151,7 @@ export const ProductsAdmin = () => {
                 //document.getElementById('jsonOutput').textContent = JSON.stringify(json, null, 2);
                 console.log(json); // Log the JSON object
                 json.forEach((element) => {
-                    storeProduct({ product_id: element.design, rate: 0, design: element.design, color: element.color, name: element.color, category: "core" })
+                    storeProduct({ product_id: element.id, rate: 0, design: element.design, color: element.color, name: element.color, category: "core" })
                 });
             } catch (error) {
                 alert('Error parsing JSON: ' + error.message);
