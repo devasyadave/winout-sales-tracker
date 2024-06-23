@@ -40,7 +40,7 @@ export const AddSalesLotPage = () => {
             const product_list = records.map((item) => {
                 return {
                     label: String(item.product_id), value: item.product_id,
-                    product_id: item.product_id, category: item.category, name: item.name
+                    product_id: item.product_id, category: item.category, name: item.name, size: item.size
                 }
             })
             setProducts(product_list);
@@ -127,7 +127,7 @@ export const AddSalesLotPage = () => {
                             <Card variant="outlined" sx={{ width: '100%', margin: 0, padding: 0 }}>
                                 <CardContent sx={{ padding: '8px !important' }}>
                                     <Typography variant="subtitle1">ID: {option.product_id}</Typography>
-                                    <Typography variant="subtitle1">Name: {option.name}</Typography>
+                                    <Typography variant="subtitle1">Name: {option.name} - {option.size}</Typography>
                                     <Typography variant="subtitle1">Category: {option.category}</Typography>
                                 </CardContent>
                             </Card>

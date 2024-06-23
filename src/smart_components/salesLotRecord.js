@@ -1,5 +1,5 @@
 import { Edit, Height, Save } from "@mui/icons-material"
-import { Card, CardContent, Icon, IconButton, TextField, Typography, Box, Divider, CircularProgress, Autocomplete } from "@mui/material"
+import { Card, CardContent, Icon, IconButton, TextField, Typography, Box, Divider, CircularProgress, Autocomplete, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, TableFooter } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react"
@@ -61,15 +61,32 @@ export const SalesLotRecord = ({ sales_lot_record, products, onSaveRecord }) => 
                 <Divider style={{ margin: 4, marginBottom: 8 }}></Divider>
                 {salesLotRecord.salesLot.map((item, index) => {
                     return (<Box key={index} display="flex" gap={4}>
-                        <Typography variant="p">Product ID</Typography>
-                        <Typography>{item.product_id}</Typography>
-                        <Typography variant="p">Quantity</Typography>
-                        <Typography>{item.quantity}</Typography>
-                        <Typography variant="p">Total</Typography>
-                        <Typography>{item.quantity * 10}</Typography>
+                        <TableContainer component={Paper}>
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Product ID</TableCell>
+                                        <TableCell>Quantity</TableCell>
+                                        <TableCell>Total</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>{item.product_id}</TableCell>
+                                        <TableCell>{item.quantity}</TableCell>
+                                        <TableCell>{item.quantity * 10}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                                <TableFooter>
+                                    <TableRow>
+                                        <TableCell colSpan={2} style={{ fontWeight: 'bold' }}>Overall Total</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }}>{salesLotRecord.salesLot.reduce((acc, item) => { return acc + (10 * item.quantity) }, 0)}</TableCell>
+                                    </TableRow>
+                                </TableFooter>
+                            </Table>
+                        </TableContainer>
                     </Box>)
                 })}
-                <Typography variant="p" style={{ float: "left" }}><b>Overall Total : {salesLotRecord.salesLot.reduce((acc, item) => { return acc + (10 * item.quantity) }, 0)}</b></Typography>
 
             </CardContent>
         </Card>
