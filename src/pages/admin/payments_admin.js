@@ -45,8 +45,8 @@ const PaymentsAdmin = () => {
             label: 'Sales Lot ID'
         },
         {
-            name: 'total',
-            label: 'Total'
+            name: 'commission',
+            label: 'Incentive'
         },
         {
             name: 'paid',
@@ -92,7 +92,7 @@ const PaymentsAdmin = () => {
                 catch (e) {
                     console.log(e)
                 }
-                sale['name'] = prod.name
+                sale['name'] = `${prod.product_id} - ${prod.design} - ${prod.color} - ${prod.size}`
 
                 sale['product'] = prod
                 return sale
@@ -133,7 +133,7 @@ const PaymentsAdmin = () => {
 
     const renderDetails = (salesLot) => {
         const details = salesLot['salesLot'];
-        const total = details.reduce((acc, item) => acc + item.rate * item.quantity, 0);
+        const total_quantity = details.reduce((acc, item) => acc + item.quantity, 0);
         const commission = details.reduce((acc, item) => acc + 10 * item.quantity, 0);
         return (
             <CardContent>
@@ -141,25 +141,25 @@ const PaymentsAdmin = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
-                            <TableCell>Rate</TableCell>
+                            {/* <TableCell>Rate</TableCell> */}
                             <TableCell>Quantity</TableCell>
-                            <TableCell>Total</TableCell>
-                            <TableCell>Commission</TableCell>
+                            {/* <TableCell>Total</TableCell> */}
+                            <TableCell>Incentive</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {details.map((item, index) => (
                             <TableRow key={index}>
                                 <TableCell>{item.name}</TableCell>
-                                <TableCell>{item.rate}</TableCell>
+                                {/* <TableCell>{item.rate}</TableCell> */}
                                 <TableCell>{item.quantity}</TableCell>
-                                <TableCell>{item.rate * item.quantity}</TableCell>
+                                {/* <TableCell>{item.rate * item.quantity}</TableCell> */}
                                 <TableCell>{10 * item.quantity}</TableCell>
                             </TableRow>
                         ))}
                         <TableRow>
-                            <TableCell colSpan={3} align="right">Overall Total</TableCell>
-                            <TableCell>{total}</TableCell>
+                            <TableCell colSpan={1} align="right">Overall Total</TableCell>
+                            <TableCell>{total_quantity}</TableCell>
                             <TableCell>{commission}</TableCell>
 
                         </TableRow>

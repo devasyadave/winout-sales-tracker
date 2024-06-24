@@ -85,7 +85,7 @@ export const ProductsAdmin = () => {
         },
         {
             name: "name",
-            label: "Name",
+            label: "Color",
             options: {
                 filter: true,
                 sort: true,
@@ -214,7 +214,7 @@ export const ProductsAdmin = () => {
                 />
             </ThemeProvider >
             <LinearProgress variant="determinate" value={uploadProgress} />
-            <div>
+            {/* <div>
                 <input
                     //accept="image/*"
                     id="contained-button-file"
@@ -227,7 +227,7 @@ export const ProductsAdmin = () => {
                         Upload
                     </Button>
                 </label>
-            </div>
+            </div> */}
         </Box>
     );
 
